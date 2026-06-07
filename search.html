@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="css/all.min.css" />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="spinner.css" />
+    <script
+      src="https://kit.fontawesome.com/2fe5944516.js"
+      crossorigin="anonymous"
+    ></script>
+  </head>
+  <body>
+    <div class="header">
+      <div class="container">
+        <nav class="navigation">
+          <div class="section1">
+            <a href="index.html" class="main-link">
+              <h3 class="home">FLIXX</h3>
+            </a>
+          </div>
+          <div class="section2">
+            <a href="shows.html" class="main-link">
+              <h3 class="movies">Series</h3>
+            </a>
+            <a href="tv-details.html" class="main-link">
+              <h3 class="shows">TV shows</h3>
+            </a>
+          </div>
+        </nav>
+      </div>
+    </div>
+
+    <div class="image-container">
+      <img src="images/showcase-bg.jpg" alt="" />
+      <h3>NOW PLAYING</h3>
+    </div>
+
+    <div class="alertContainer"></div>
+
+    <form id="search-form" action="search.html">
+      <div class="section4">
+        <div class="radio-button1">
+          <input
+            class="radio1"
+            type="radio"
+            name="type"
+            value="movie"
+            checked
+          />
+          <h4>Movies</h4>
+        </div>
+        <div class="radio-button2">
+          <input class="radio1" type="radio" name="type" value="tv" />
+          <h4>TV Shows</h4>
+        </div>
+      </div>
+
+      <div class="input-field">
+        <input
+          type="text"
+          id="search-term"
+          name="search-term"
+          class="input"
+          placeholder="Enter search item"
+        />
+        <button type="submit" class="search">
+          <i class="fa-solid fa-magnifying-glass"></i>
+        </button>
+      </div>
+    </form>
+
+    <div class="main-body">
+      <div class="main-body1">
+        <h3>POPULAR SERIES</h3>
+      </div>
+
+      <div class="container">
+        <div class="main-body2">
+          <div class="movie-body">
+            <img src="images/no-image.jpg" alt="" />
+            <h3>Movie Title</h3>
+            <h3>Release: XX/XX/XXXX</h3>
+          </div>
+          <div class="movie-body">
+            <img src="images/no-image.jpg" alt="" />
+            <h3>Movie Title</h3>
+            <h3>Release: XX/XX/XXXX</h3>
+          </div>
+          <div class="movie-body">
+            <img src="images/no-image.jpg" alt="" />
+            <h3>Movie Title</h3>
+            <h3>Release: XX/XX/XXXX</h3>
+          </div>
+          <div class="movie-body">
+            <img src="images/no-image.jpg" alt="" />
+            <h3>Movie Title</h3>
+            <h3>Release: XX/XX/XXXX</h3>
+          </div>
+          <div class="movie-body">
+            <img src="images/no-image.jpg" alt="" />
+            <h3>Movie Title</h3>
+            <h3>Release: XX/XX/XXXX</h3>
+          </div>
+          <div class="movie-body">
+            <img src="images/no-image.jpg" alt="" />
+            <h3>Movie Title</h3>
+            <h3>Release: XX/XX/XXXX</h3>
+          </div>
+          <div class="movie-body">
+            <img src="images/no-image.jpg" alt="" />
+            <h3>Movie Title</h3>
+            <h3>Release: XX/XX/XXXX</h3>
+          </div>
+          <div class="movie-body">
+            <img src="images/no-image.jpg" alt="" />
+            <h3>Movie Title</h3>
+            <h3>Release: XX/XX/XXXX</h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pages">
+      <div class="container">
+        <div class="buttonsNav">
+          <button class="PrevButton">Prev</button>
+          <button class="nextButton">Next</button>
+        </div>
+        <div class="PageNav">Page 1 of 5</div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="container">
+        <div class="footer-Main">
+          <div class="footer1">
+            <h3>FLIXX</h3>
+          </div>
+          <div class="footer2">
+            <i class="fa-brands fa-facebook"></i>
+            <i class="fa-brands fa-x-twitter"></i>
+            <i class="fa-brands fa-instagram"></i>
+          </div>
+        </div>
+      </div>
+      <div class="spinner"></div>
+    </div>
+    <script src="script.js"></script>
+  </body>
+</html>
