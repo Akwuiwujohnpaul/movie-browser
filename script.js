@@ -67,7 +67,7 @@ async function displayPopularShows() {
 async function displayMovieDetails() {
   const main = document.querySelector(".main-Tv_shows");
   const footer = document.querySelector(".lowerSection");
-  const movieID = window.location.search.split("=")[1];
+  const movieID = new URLSearchParams(window.location.search).get("id");
 
   //overlay for background image
   const movie = await fetchAPIData(`movie/${movieID}`);
@@ -123,7 +123,8 @@ async function displayMovieDetails() {
 async function displayshowDetails() {
   const main = document.querySelector(".main-Tv_shows");
   const footer = document.querySelector(".lowerSection");
-  const showID = window.location.search.split("=")[1];
+  console.log(window.location.search);
+  const showID = new URLSearchParams(window.location.search).get("id");
 
   //overlay for background image
   const show = await fetchAPIData(`tv/${showID}`);
@@ -246,28 +247,54 @@ async function searchAPIData() {
   showSpinner();
 
   const response = await fetch(
-    `${API_URL}search/${global.search.type}?api_key=${API_KEY}&language=en-U&query=${global.search.term}`,
+    `${API_URL}search/${global.search.type}?api_key=${API_KEY}&language=en-US&query=${global.search.term}`,
   );
-  const data = await response.json();
+  const { results, total_pages, page } = await response.json();
+
+  if (results.length === 0) {
+    showAlert("No result found", "alert-error");
+    return;
+  }
+
+  displaySearchResult(results);
+  document.querySelector('input[name="search-term"]').value = "";
 
   hideSpinner();
-  console.log(data);
-  return data;
 }
 
-// stop submission if there is no input
-const form = document.querySelector("form");
+//Display search result
+async function displaySearchResult(result) {
+  result.forEach((search) => {
+    const main = document.querySelector(".main-body2");
+    const a = document.createElement("a");
+    a.className = "main-link";
+    a.href =
+      global.search.type === "movie"
+        ? `tv-details.html?id=${search.id}`
+        : `tv-shows.html?id=${search.id}`;
+    const div = document.createElement("div");
+    div.className = "movie-body";
 
-if (form) {
-  form.addEventListener("submit", function (e) {
-    const input = document
-      .querySelector('input[name="search-term"]')
-      .value.trim();
-
-    if (!input) {
-      e.preventDefault();
-      showAlert("Please enter a movie title", "alert-error");
+    const img = document.createElement("img");
+    if (search.poster_path) {
+      img.src = `https://image.tmdb.org/t/p/w500/${search.poster_path}`;
+    } else {
+      img.src = "images/no-image.jpg";
     }
+    const h3 = document.createElement("h3");
+    h3.textContent =
+      global.search.type === "movie" ? search.title : search.name;
+    const p = document.createElement("p");
+    p.textContent = `Release: 
+      ${
+        global.search.type === "movie"
+          ? search.release_date
+          : search.first_air_date
+      }`;
+
+    main.append(a);
+    a.append(div);
+    div.append(img, h3, p);
   });
 }
 
@@ -278,10 +305,27 @@ async function search() {
   global.search.term = urlParams.get("search-term");
   global.search.type = urlParams.get("type");
 
-  // if (global.search.term !== "" && global.search.term !== null) {
-  // } else {
-  //   showAlert("Please enter a movie");
-  // }
+  if (global.search.term) {
+    await searchAPIData();
+  }
+
+  const form = document.querySelector("form");
+
+  if (form) {
+    form.addEventListener("submit", async function (e) {
+      const input = document
+        .querySelector('input[name="search-term"]')
+        .value.trim();
+      const type = document.querySelector('input[name="type"]').value;
+      if (!input) {
+        e.preventDefault();
+        showAlert("Please enter a movie title", "alert-error");
+      } else {
+        global.search.term = input;
+        global.search.type = type;
+      }
+    });
+  }
 }
 
 // show alert
@@ -298,9 +342,11 @@ function showAlert(message, className) {
 
 // Init App
 function init() {
+  console.log(global.currentPage);
   if (global.currentPage == "/index.html") {
     displayPopularMovies();
     displaySlider();
+    search();
   } else if (global.currentPage === "/search.html") {
     search();
   } else if (global.currentPage === "/shows.html") {
