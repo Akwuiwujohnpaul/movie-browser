@@ -3,8 +3,9 @@ const global = {
   search: {
     term: "",
     type: "",
-    page: "1,",
-    totalPages: 1,
+    CurrentPage: 1,
+    TotalPages: 1,
+    totalResult: 1,
   },
 };
 
@@ -223,14 +224,14 @@ function initSwipper() {
 }
 
 // Fetch Data from API
-async function fetchAPIData(endpoint) {
+async function fetchAPIData(endpoint, page = 1) {
   const API_KEY = "b5f08f86f270936a7a994e303cf666c7";
   const API_URL = "https://api.themoviedb.org/3/";
 
   showSpinner();
 
   const response = await fetch(
-    `${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US`,
+    `${API_URL}${endpoint}?api_key=${API_KEY}&language=en-US&page=${page}`,
   );
   const data = await response.json();
 
@@ -247,9 +248,13 @@ async function searchAPIData() {
   showSpinner();
 
   const response = await fetch(
-    `${API_URL}search/${global.search.type}?api_key=${API_KEY}&language=en-US&query=${global.search.term}`,
+    `${API_URL}search/${global.search.type}?api_key=${API_KEY}&language=en-US&query=${global.search.term}&page=${global.search.CurrentPage}`,
   );
-  const { results, total_pages, page } = await response.json();
+  const { results, total_pages, page, total_results } = await response.json();
+
+  global.search.TotalPages = total_pages;
+  global.search.CurrentPage = page;
+  global.search.totalResult = total_results;
 
   if (results.length === 0) {
     showAlert("No result found", "alert-error");
@@ -260,10 +265,55 @@ async function searchAPIData() {
   document.querySelector('input[name="search-term"]').value = "";
 
   hideSpinner();
+  return { results, total_pages };
+}
+
+//Display pagination for search
+function displayPagination() {
+  const pages = document.querySelector(".pages");
+  pages.innerHTML = `        <div class="container">
+        <div class="buttonsNav">
+          <button class="PrevButton">Prev</button>
+          <button class="nextButton">Next</button>
+        </div>
+        <div class="PageNav">Page ${global.search.CurrentPage} of ${global.search.TotalPages}</div>
+      </div>`;
+
+  // Disable pevious button if on firstpage
+  if (global.search.CurrentPage === 1) {
+    document.querySelector(".PrevButton").disabled = true;
+  }
+
+  // Disable next button if on lastPage
+  if (global.search.CurrentPage === global.search.TotalPages) {
+    document.querySelector(".nextButton").disabled = true;
+  }
+
+  //Next Page
+  document.querySelector(".nextButton").addEventListener("click", async () => {
+    global.search.CurrentPage++;
+
+    const { results, total_pages } = await searchAPIData();
+    global.search.TotalPages = total_pages;
+    displaySearchResult(results);
+    displayPagination();
+    window.scrollTo(0, 0);
+  });
+
+  //previous Page
+  document.querySelector(".PrevButton").addEventListener("click", async () => {
+    global.search.CurrentPage--;
+
+    const { results, total_pages } = await searchAPIData();
+    displaySearchResult(results);
+    displayPagination();
+  });
 }
 
 //Display search result
 async function displaySearchResult(result) {
+  const main = document.querySelector(".main-body2");
+  main.innerHTML = "";
   result.forEach((search) => {
     const main = document.querySelector(".main-body2");
     const a = document.createElement("a");
@@ -306,7 +356,9 @@ async function search() {
   global.search.type = urlParams.get("type");
 
   if (global.search.term) {
-    await searchAPIData();
+    const { results, total_pages } = await searchAPIData();
+    displaySearchResult(results);
+    displayPagination();
   }
 
   const form = document.querySelector("form");
@@ -318,11 +370,14 @@ async function search() {
         .value.trim();
       const type = document.querySelector('input[name="type"]').value;
       if (!input) {
-        e.preventDefault();
         showAlert("Please enter a movie title", "alert-error");
       } else {
         global.search.term = input;
         global.search.type = type;
+        const { results, total_pages } = await searchAPIData();
+        displaySearchResult(results);
+        global.search.totalPages = total_pages;
+        displayPagination();
       }
     });
   }
@@ -349,6 +404,7 @@ function init() {
     search();
   } else if (global.currentPage === "/search.html") {
     search();
+    displayPagination();
   } else if (global.currentPage === "/shows.html") {
     displayPopularShows();
   } else if (global.currentPage === "/tv-details.html") {
