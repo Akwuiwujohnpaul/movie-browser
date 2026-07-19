@@ -398,7 +398,7 @@ function showAlert(message, className) {
 // Init App
 function init() {
   console.log(global.currentPage);
-  if (global.currentPage == "/index.html") {
+if (global.currentPage == "/index.html" || global.currentPage == "/") {
     displayPopularMovies();
     displaySlider();
     search();
@@ -421,7 +421,7 @@ function highlightActiveLink() {
   const movies = document.querySelector(".movies");
   const tv_details = document.querySelector(".shows");
 
-  if (global.currentPage === "/index.html") {
+  if (global.currentPage == "/index.html" || global.currentPage == "/") {
     home.style.color = "#ffc107";
   } else if (global.currentPage === "/shows.html") {
     movies.style.color = "#ffc107";
