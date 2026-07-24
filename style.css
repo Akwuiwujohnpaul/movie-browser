@@ -313,14 +313,18 @@ body {
 }
 
 .swiper {
-  display: grid;
-  place-items: center;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
   margin-top: 2rem;
 }
+
 .swiper-slide {
-  display: grid;
-  place-items: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
+
 .swiper-rating {
   display: flex;
 }
@@ -330,9 +334,7 @@ body {
 }
 
 .swiper-wrapper {
-  width: 50rem;
   display: flex;
-  justify-content: center;
 }
 
 .swiper-image {
@@ -377,5 +379,18 @@ body {
     display: flex;
     flex-direction: column;
     width: 22rem;
+  }
+}
+
+@media (max-width: 1050px) {
+  .tvShows-main {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 450px) {
+  .main-section-image {
+    object-fit: cover;
   }
 }

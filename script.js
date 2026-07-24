@@ -202,7 +202,7 @@ async function displaySlider() {
 function initSwipper() {
   const swiper = new Swiper(".swiper", {
     slidesPerView: 1,
-    spaceBetween: 30,
+    spaceBetween: 10,
     loop: false,
     freeMode: true,
     autoplay: {
@@ -398,7 +398,7 @@ function showAlert(message, className) {
 // Init App
 function init() {
   console.log(global.currentPage);
-if (global.currentPage == "/index.html" || global.currentPage == "/") {
+  if (global.currentPage == "/index.html" || global.currentPage == "/") {
     displayPopularMovies();
     displaySlider();
     search();
